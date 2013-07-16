@@ -1,0 +1,6 @@
+
+## Music Picks for Sing-Along, Dancing, and Baby Relaxation
+
+At our son's preschool graduation ceremony this week the teachers revealed one of their secrets to entertaining a gang of 4-year-olds.  After handing out diplomas they turned the event into a sing-along and dance party just like they've done in class all year.  They started out with the kids seated in a circle singing along to a couple of tracks from [We All Live Together Vol 2 by Greg & Steve](http://www.amazon.com/Vol-2-We-All-Live-Together/dp/B00000AG62 "We All Live Together by Greg & Steve"), and then they busted out [Go Baby Go by the Baby Loves Jazz Band](http://www.amazon.com/Go-Baby-Loves-Jazz/dp/B000G759FI "Go Baby Go - Baby Loves Jazz Band") and had the whole crew up and grooving, jumping around, and even breakdancing.
+
+If you're looking for a more soothing sound for newborns or in utero audiophiles, check out the recently released [Jazz For Babies Vibraphone Album by Michael Janisch](http://www.jazzforbabies.org/the-vibraphone-album/ "Jazz For Babies Vibraphone").

@@ -1,0 +1,10 @@
+
+## Historic Supreme Court Ruling For Same-Sex Parents
+
+This week the US Supreme Court Struck down the Defense of Marriage Act (DOMA), a 1996 law preventing the federal government from recognizing same-sex marriage.  The court determined that same-sex families were being denied dignity, protections, and benefits afforded to other families, causing financial harm to married gay couples and their children.
+
+** Financial: ** Once changes are implemented, same-sex families will no longer experience unfair financial burdens in a range of matters: taxes on inheritance, federal health care benefits, military and veterans benefits, social security benefits, US citizenship. Gay married couples will no longer need to pay an average of $1000 yearly because of inability to file federal income taxes jointly. Their children will no longer experience discrimination in terms of eligiblity for health insurance and other benefits.  Denise Chow [covers the financial effects in detail](http://www.livescience.com/37779-supreme-court-doma-rulings-gay-couples.html "Financial effects of ending DOMA").
+
+** Dignity: ** The ruling calls for dignity for same-sex parents and their children. According to Justice Anthony Kennedy, DOMA "humiliates children being raised by same sex couples and makes it even more difficult for the children to understand the integrity and closeness of their own family and its concord with other families in their community and in their daily lives."  Erik Kain looks at [dignity and DOMA's harmful effects on children in this Mother Jones article](http://www.motherjones.com/mojo/2013/06/doma-justice-kennedy-children "DOMA Had To Go")
+
+<a href="http://www.newyorker.com/online/blogs/culture/2013/06/new-yorker-cover-bert-ernie-gay-marriage.html" target="_blank" style="color: #336699;font-weight: normal;text-decoration: underline;"><img align="none" height="245" src="http://gallery.mailchimp.com/47cda70fd2e6dea4ca221b607/images/new_yorker_cover_bert_ernie_gay_marriage_580.jpg" style="width: 180px;height: 245px;border: 0;line-height: 100%;outline: none;text-decoration: none;display: inline;" width="180"></a>
