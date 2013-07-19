@@ -17,7 +17,7 @@ edition = json.loads(editionFile.read())
 editionFile.close()
 
 
-def addStyling(html):
+def addEmailStyling(html):
     soup = BeautifulSoup(html)
     # style images
     imgstyle = "float: right; width: 200px; margin: 0 20px"
@@ -32,20 +32,23 @@ def addStyling(html):
     htmlStyled = str(soup).decode("UTF-8", "replace")
     return htmlStyled
 
-def writeArticlePage():
+def writeArticlePage(articleObj):
+    pass
 
 
 def parseModifiedMarkdown(mmd):
     endJson = mmd.index("}")
     jsonStr = mmd[0:(endJson+1)].lstrip()
+    originalMarkdown = mmd[endJson+1:].lstrip().rstrip()
     articleObj = json.loads(jsonStr)
-    articleObj["markdown"] = mmd[endJson+1:].lstrip().rstrip()
+    titledMarkdown = "## " + articleObj["title"] + "\n\n" + originalMarkdown
+    articleObj["markdown"] = titledMarkdown
     return articleObj
 
 
 def renderEmailArticle(md):
     html = markdown.markdown(md)
-    htmlStyled = addStyling(html)
+    htmlStyled = addEmailStyling(html)
     return htmlStyled
 
 articleNames = edition["articles"]
@@ -58,11 +61,12 @@ for articleName in articleNames:
     articleObj = parseModifiedMarkdown(mmd)
     articleHtml = renderEmailArticle(articleObj)
     editionHtml.append(articleHtml)
+    writeArticlePage(articleObj)
 
 delim = "\n\n\n<br>\n\n\n"
 html = delim.join(editionHtml)
 
-htmlFile = codecs.open(srcdir + "/" + srcdir + ".html",
+htmlFile = codecs.open(targetdir + "/" + targetdir + ".html",
 	"w",
 	encoding="utf-8", 
     errors="xmlcharrefreplace"
