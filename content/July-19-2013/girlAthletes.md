@@ -1,7 +1,7 @@
 
 {
-  "title": "96% Of C-Suite Women Played Sports in School"
-	"category": "sports",
+  "title": "96% Of C-Suite Women Played Sports in School",
+  "category": "sports",
   "gender": "girls",
   "keywords": [
     "business"

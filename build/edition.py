@@ -10,7 +10,7 @@ targetdir = sys.argv[2].rstrip("/")
 
 # templates
 tmpldir = "./templates/"
-articleShareLinks = open(templdir + "articleShareLinks.html")
+articleShareLinks = open(tmpldir + "articleShareLinks.html")
 
 editionFile = open(srcdir + "/edition.json", "r")
 edition = json.loads(editionFile.read())
@@ -37,17 +37,20 @@ def writeArticlePage(articleObj):
 
 
 def parseModifiedMarkdown(mmd):
-    endJson = mmd.index("}")
-    jsonStr = mmd[0:(endJson+1)].lstrip()
-    originalMarkdown = mmd[endJson+1:].lstrip().rstrip()
-    articleObj = json.loads(jsonStr)
-    titledMarkdown = "## " + articleObj["title"] + "\n\n" + originalMarkdown
-    articleObj["markdown"] = titledMarkdown
+    endJson = mmd.find("}")
+    if endJson > 0:
+        jsonStr = mmd[0:(endJson+1)].lstrip()
+        originalMarkdown = mmd[endJson+1:].lstrip().rstrip()
+        articleObj = json.loads(jsonStr)
+        titledMarkdown = "## " + articleObj["title"] + "\n\n" + originalMarkdown
+        articleObj["markdown"] = titledMarkdown
+    else:
+        articleObj = { "markdown": mmd }
     return articleObj
 
 
-def renderEmailArticle(md):
-    html = markdown.markdown(md)
+def renderEmailArticle(articleObj):
+    html = markdown.markdown(articleObj["markdown"])
     htmlStyled = addEmailStyling(html)
     return htmlStyled
 
