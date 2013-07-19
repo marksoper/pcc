@@ -4,13 +4,15 @@ import markdown
 import json
 import codecs
 from BeautifulSoup import BeautifulSoup
+import pystache
 
 srcdir = sys.argv[1].rstrip("/")
 targetdir = sys.argv[2].rstrip("/")
 
 # templates
 tmpldir = "./templates/"
-articleShareLinks = open(tmpldir + "articleShareLinks.html")
+articleShareLinksTemplate = open(tmpldir + "articleShareLinks.html")
+editionTemplate = open(tmpldir + "edition.html")
 
 editionFile = open(srcdir + "/edition.json", "r")
 edition = json.loads(editionFile.read())
@@ -55,7 +57,7 @@ def renderEmailArticle(articleObj):
     return htmlStyled
 
 articleNames = edition["articles"]
-editionHtml = []
+articlesHtml = []
 for articleName in articleNames:
     articleName = articleName.rstrip(".md") + ".md"
     mdfile = codecs.open(srcdir + "/" + articleName, mode="r", encoding="utf-8")
@@ -63,18 +65,20 @@ for articleName in articleNames:
     mdfile.close()
     articleObj = parseModifiedMarkdown(mmd)
     articleHtml = renderEmailArticle(articleObj)
-    editionHtml.append(articleHtml)
+    articlesHtml.append(articleHtml)
     writeArticlePage(articleObj)
 
 delim = "\n\n\n<br>\n\n\n"
-html = delim.join(editionHtml)
+edition["content"] = delim.join(articlesHtml)
 
-htmlFile = codecs.open(targetdir + "/" + targetdir + ".html",
+editionHtml = pystache.render(editionTemplate, edition)
+
+htmlFile = codecs.open(targetdir + "/" + edition["url"],
 	"w",
 	encoding="utf-8", 
     errors="xmlcharrefreplace"
 )
 
-htmlFile.write(html)
+htmlFile.write(editionHtml)
 htmlFile.close()
 
