@@ -8,9 +8,14 @@ from BeautifulSoup import BeautifulSoup
 srcdir = sys.argv[1].rstrip("/")
 targetdir = sys.argv[2].rstrip("/")
 
+# templates
+tmpldir = "./templates/"
+articleShareLinks = open(templdir + "articleShareLinks.html")
+
 editionFile = open(srcdir + "/edition.json", "r")
 edition = json.loads(editionFile.read())
 editionFile.close()
+
 
 def addStyling(html):
     soup = BeautifulSoup(html)
@@ -27,19 +32,35 @@ def addStyling(html):
     htmlStyled = str(soup).decode("UTF-8", "replace")
     return htmlStyled
 
+def writeArticlePage():
 
 
-articlesHtml = []
-for article in articles:
-    mdfile = codecs.open(srcdir + "/" + article, mode="r", encoding="utf-8")
-    md = mdfile.read()
-    mdfile.close()
+def parseModifiedMarkdown(mmd):
+    endJson = mmd.index("}")
+    jsonStr = mmd[0:(endJson+1)].lstrip()
+    articleObj = json.loads(jsonStr)
+    articleObj["markdown"] = mmd[endJson+1:].lstrip().rstrip()
+    return articleObj
+
+
+def renderEmailArticle(md):
     html = markdown.markdown(md)
     htmlStyled = addStyling(html)
-    articlesHtml.append(htmlStyled)
+    return htmlStyled
+
+articleNames = edition["articles"]
+editionHtml = []
+for articleName in articleNames:
+    articleName = articleName.rstrip(".md") + ".md"
+    mdfile = codecs.open(srcdir + "/" + articleName, mode="r", encoding="utf-8")
+    mmd = mdfile.read()
+    mdfile.close()
+    articleObj = parseModifiedMarkdown(mmd)
+    articleHtml = renderEmailArticle(articleObj)
+    editionHtml.append(articleHtml)
 
 delim = "\n\n\n<br>\n\n\n"
-html = delim.join(articlesHtml)
+html = delim.join(editionHtml)
 
 htmlFile = codecs.open(srcdir + "/" + srcdir + ".html",
 	"w",
