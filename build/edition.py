@@ -5,19 +5,32 @@ import json
 import codecs
 from BeautifulSoup import BeautifulSoup
 import pystache
+from datetime import datetime
 
 srcdir = sys.argv[1].rstrip("/")
 targetdir = sys.argv[2].rstrip("/")
 
 # templates
 tmpldir = "./templates/"
-articleShareLinksTemplate = open(tmpldir + "articleShareLinks.html")
-editionTemplate = open(tmpldir + "edition.html")
+emailArticleTemplate = open(tmpldir + "emailArticle.html").read()
 
 editionFile = open(srcdir + "/edition.json", "r")
 edition = json.loads(editionFile.read())
 editionFile.close()
 
+
+def urlify(s):
+    t = '-'.join(s.split())
+    u = ''.join([c for c in t if c.isalnum() or c=='-'])
+    u = u + ".html"
+    return u
+
+def generateEditionUrl(edition):
+    pub = datetime.strptime(edition["pubDate"], "%B %d, %Y")
+    url = "/" + datetime.strftime(pub, "%Y") + "/" + datetime.strftime(pub, "%m") + "/" + datetime.strftime(pub, "%d")
+    url = url + "/" + "newsletter" + "/" + urlify(edition["subject"])
+
+edition["url"] = generateEditionUrl(edition)
 
 def addEmailStyling(html):
     soup = BeautifulSoup(html)
@@ -25,7 +38,7 @@ def addEmailStyling(html):
     imgstyle = "float: right; width: 200px; margin: 0 20px"
     imgs = soup.findAll("img")
     for img in imgs:
-    	img.attrs.append(("style", imgstyle))
+        img.attrs.append(("style", imgstyle))
     # style h2 tags
     h2style = "clear:both; font-size: 18px; margin-top: 15px"
     h2s = soup.findAll("h2")
@@ -38,23 +51,22 @@ def writeArticlePage(articleObj):
     pass
 
 
-def parseModifiedMarkdown(mmd):
+def parseModifiedArticleMarkdown(mmd):
     endJson = mmd.find("}")
     if endJson > 0:
         jsonStr = mmd[0:(endJson+1)].lstrip()
-        originalMarkdown = mmd[endJson+1:].lstrip().rstrip()
         articleObj = json.loads(jsonStr)
-        titledMarkdown = "## " + articleObj["title"] + "\n\n" + originalMarkdown
-        articleObj["markdown"] = titledMarkdown
-    else:
-        articleObj = { "markdown": mmd }
-    return articleObj
+        articleObj["markdown"] = mmd[endJson+1:].lstrip().rstrip()
+        return articleObj
+    print "WARNING: Article not handled: " + mmd
+    return None
 
 
 def renderEmailArticle(articleObj):
-    html = markdown.markdown(articleObj["markdown"])
-    htmlStyled = addEmailStyling(html)
-    return htmlStyled
+    articleObj["content"] = markdown.markdown(articleObj["markdown"])
+    unstyledHtml = pystache.render(emailArticleTemplate, articleObj)
+    articleObj["emailHtml"] = addEmailStyling(unstyledHtml)
+    return articleObj["emailHtml"]
 
 articleNames = edition["articles"]
 articlesHtml = []
@@ -63,22 +75,27 @@ for articleName in articleNames:
     mdfile = codecs.open(srcdir + "/" + articleName, mode="r", encoding="utf-8")
     mmd = mdfile.read()
     mdfile.close()
-    articleObj = parseModifiedMarkdown(mmd)
+    articleObj = parseModifiedArticleMarkdown(mmd)
+    if articleObj is None:
+        continue
     articleHtml = renderEmailArticle(articleObj)
     articlesHtml.append(articleHtml)
     writeArticlePage(articleObj)
 
 delim = "\n\n\n<br>\n\n\n"
-edition["content"] = delim.join(articlesHtml)
+edition["emailHtml"] = delim.join(articlesHtml)
 
-editionHtml = pystache.render(editionTemplate, edition)
-
-htmlFile = codecs.open(targetdir + "/" + edition["url"],
+editionEmailFile = codecs.open(targetdir + "/" + edition["url"],
 	"w",
 	encoding="utf-8", 
     errors="xmlcharrefreplace"
 )
 
-htmlFile.write(editionHtml)
-htmlFile.close()
+editionEmailFile.write(edition["emailHtml"])
+editionEmailFile.close()
+
+def writeEditionPage(edition):
+    pass
+
+#writeEditionPage(edition)
 
