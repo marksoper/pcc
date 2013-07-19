@@ -29,6 +29,7 @@ def generateEditionUrl(edition):
     pub = datetime.strptime(edition["pubDate"], "%B %d, %Y")
     url = "/" + datetime.strftime(pub, "%Y") + "/" + datetime.strftime(pub, "%m") + "/" + datetime.strftime(pub, "%d")
     url = url + "/" + "newsletter" + "/" + urlify(edition["subject"])
+    return url
 
 edition["url"] = generateEditionUrl(edition)
 
@@ -85,11 +86,13 @@ for articleName in articleNames:
 delim = "\n\n\n<br>\n\n\n"
 edition["emailHtml"] = delim.join(articlesHtml)
 
-editionEmailFile = codecs.open(targetdir + "/" + edition["url"],
+editionEmailFile = codecs.open(targetdir + "/" + edition["url"].split("/")[-1],
 	"w",
 	encoding="utf-8", 
     errors="xmlcharrefreplace"
 )
+
+print "edition url: " + edition["url"]
 
 editionEmailFile.write(edition["emailHtml"])
 editionEmailFile.close()
